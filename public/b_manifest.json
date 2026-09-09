@@ -1,0 +1,11 @@
+{
+  "id": "knb.pkoin.app",
+  "name": "КНБ PKOIN",
+  "description": "Честные p2p дуэли Камень-Ножницы-Бумага в сети Pocketnet",
+  "author": "ВАШ_АДРЕС_КОШЕЛЬКА_В_BASTYON",
+  "permissions": [
+    "account",
+    "payment",
+    "sign"
+  ]
+}
