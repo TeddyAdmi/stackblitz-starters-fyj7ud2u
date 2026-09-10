@@ -1,11 +1,7 @@
 {
   "id": "knb.pkoin.v3",
   "name": "КНБ PKOIN",
-  "description": "Честные дуэли на PKOIN",
+  "description": "Игра КНБ",
   "author": "TSBRUhPWre3D23gpdsCYo3RpoAybt7YuDT",
-  "permissions": [
-    "account",
-    "payment",
-    "sign"
-  ]
+  "permissions": ["account"]
 }
