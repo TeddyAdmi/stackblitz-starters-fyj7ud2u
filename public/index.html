@@ -5,25 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
   <script>
+    window.addEventListener('error', function(e) { e.preventDefault(); }, true);
+
     (function() {
-      function handshake() {
-        if (window.parent && window.parent !== window) {
-          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-          window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-          window.parent.postMessage({ action: 'listening' }, '*');
-          window.parent.postMessage({ status: 'ready' }, '*');
-        }
+      function sendPong() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+            window.parent.postMessage({ action: 'listening' }, '*');
+            window.parent.postMessage({ status: 'ready' }, '*');
+          }
+        } catch(e) {}
       }
-      handshake();
-      window.addEventListener('message', handshake);
-      setInterval(handshake, 300);
+
+      sendPong();
+      window.addEventListener('message', sendPong);
+      setInterval(sendPong, 200);
     })();
   </script>
   <style>
     body {
       margin: 0;
       background: #0f172a;
-      color: #fff;
+      color: #ffffff;
       font-family: sans-serif;
       display: flex;
       justify-content: center;
@@ -42,7 +47,7 @@
 <body>
   <div class="card">
     <h2>КНБ PKOIN dApp</h2>
-    <p>Приложение успешно запущено в Bastyon!</p>
+    <p>Соединение успешно установлено!</p>
   </div>
 </body>
 </html>
