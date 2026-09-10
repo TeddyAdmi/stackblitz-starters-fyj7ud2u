@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
   <script>
-    window.addEventListener('error', function(e) { e.preventDefault(); }, true);
-
     (function() {
       function sendPong() {
         try {
@@ -18,36 +16,13 @@
           }
         } catch(e) {}
       }
-
       sendPong();
       window.addEventListener('message', sendPong);
       setInterval(sendPong, 200);
     })();
   </script>
-  <style>
-    body {
-      margin: 0;
-      background: #0f172a;
-      color: #ffffff;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
-  <div class="card">
-    <h2>КНБ PKOIN dApp</h2>
-    <p>Соединение успешно установлено!</p>
-  </div>
+  <div id="root">Приложение загружено!</div>
 </body>
 </html>
