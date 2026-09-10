@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КНБ PKOIN</title>
+  
+  <!-- Моментальный handshake с Bastyon -->
+  <script>
+    (function() {
+      function sendHandshake() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+            window.parent.postMessage({ action: 'listening' }, '*');
+          }
+        } catch(e) {}
+      }
+
+      sendHandshake();
+      window.addEventListener('message', function(e) { sendHandshake(); });
+      var interval = setInterval(sendHandshake, 50);
+      setTimeout(function() { clearInterval(interval); }, 3000);
+    })();
+  </script>
+
+  <!-- Подключаем SDK Pocketnet -->
+  <script src="https://test.pocketnet.app/js/vendor/pocketnet.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0f172a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 24px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    h1 { color: #fbbf24; margin-bottom: 8px; }
+    p { color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
+    .btn {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 12px 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    .btn:hover { background: #d97706; }
+    .address {
+      background: #022c22;
+      border: 1px solid #059669;
+      color: #6ee7b7;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      word-break: break-all;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>КНБ PKOIN</h1>
+    <p>Камень, Ножницы, Бумага в сети Bastyon</p>
+
+    <button class="btn" onclick="connectWallet()">Подключить кошелек</button>
+    <div id="wallet-info" style="display: none;" class="address"></div>
+  </div>
+
+  <script>
+    function connectWallet() {
+      var pn = window.pocketnet || window.pkoin || (window.parent && window.parent.pocketnet);
+      if (pn && typeof pn.getAccount === 'function') {
+        pn.getAccount().then(function(addr) {
+          var el = document.getElementById('wallet-info');
+          el.innerText = 'Кошелек: ' + addr;
+          el.style.display = 'block';
+        }).catch(function(err) {
+          alert('Ошибка получения кошелька');
+        });
+      } else {
+        alert('Запустите внутри Bastyon');
+      }
+    }
+  </script>
+
+</body>
+</html>
