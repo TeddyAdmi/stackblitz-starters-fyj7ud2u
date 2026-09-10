@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'КНБ PKOIN',
-  description: 'Камень Ножницы Бумага dApp',
+  description: 'dApp Игра',
 };
 
 export default function RootLayout({
@@ -14,35 +14,19 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        {/* Моментальный handshake с Bastyon до загрузки React */}
+        {/* Подключаем официальный скрипт взаимодействия Bastyon */}
+        <script src="https://pocketnet.app/js/vendor/pocketnet.js" async />
+        
+        {/* Принудительное авто-рукопожатие для контейнера */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
-                function sendReady() {
-                  try {
-                    if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-                      window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-                      window.parent.postMessage({ action: 'listening' }, '*');
-                    }
-                  } catch(e) {}
+              window.addEventListener('DOMContentLoaded', function() {
+                if (window.parent && window.parent !== window) {
+                  window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+                  window.parent.postMessage({ action: 'listening' }, '*');
                 }
-                
-                // Отправляем сразу при старте загрузки HTML
-                sendReady();
-
-                // Слушаем пинги от Bastyon
-                window.addEventListener('message', function(event) {
-                  if (event.data) {
-                    sendReady();
-                  }
-                });
-
-                // Повторяем каждые 100ms в течение первой секунды
-                var interval = setInterval(sendReady, 100);
-                setTimeout(function() { clearInterval(interval); }, 2000);
-              })();
+              });
             `,
           }}
         />
