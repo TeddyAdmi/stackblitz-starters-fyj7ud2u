@@ -14,19 +14,24 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        {/* Подключаем официальный скрипт взаимодействия Bastyon */}
-        <script src="https://pocketnet.app/js/vendor/pocketnet.js" async />
-        
-        {/* Принудительное авто-рукопожатие для контейнера */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.addEventListener('DOMContentLoaded', function() {
-                if (window.parent && window.parent !== window) {
-                  window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-                  window.parent.postMessage({ action: 'listening' }, '*');
+              (function() {
+                function reply() {
+                  try {
+                    if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+                      window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+                      window.parent.postMessage({ action: 'listening' }, '*');
+                    }
+                  } catch(e) {}
                 }
-              });
+                reply();
+                window.addEventListener('message', reply);
+                var i = setInterval(reply, 50);
+                setTimeout(function() { clearInterval(i); }, 3000);
+              })();
             `,
           }}
         />
