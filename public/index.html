@@ -1,62 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>КНБ PKOIN</title>
-  
-  <!-- Моментальный рукопожатный скрипт Bastyon -->
-  <script>
-    (function() {
-      function sendPong() {
-        try {
-          if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-            window.parent.postMessage({ action: 'listening' }, '*');
-          }
-        } catch(e) {}
-      }
-
-      // Отправка сразу при старте
-      sendPong();
-
-      // Отклик на любые входящие сообщения от родительского окна
-      window.addEventListener('message', function(e) {
-        sendPong();
-      });
-
-      // Периодическая отправка во время инициализации iFrame
-      var interval = setInterval(sendPong, 50);
-      setTimeout(function() { clearInterval(interval); }, 3000);
-    })();
-  </script>
-
-  <style>
-    body {
-      margin: 0;
-      background-color: #0f172a;
-      color: #ffffff;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+<script>
+  (function() {
+    function ping() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+          window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+          window.parent.postMessage({ action: 'listening' }, '*');
+        }
+      } catch(e) {}
     }
-    .container {
-      text-align: center;
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #334155;
-    }
-    h1 { color: #fbbf24; margin-bottom: 10px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>КНБ PKOIN</h1>
-    <p>Приложение успешно запущено!</p>
-  </div>
-</body>
-</html>
+
+    // Слушаем ВСЕ входящие сообщения от Bastyon и сразу ответим
+    window.addEventListener('message', function(event) {
+      ping();
+    });
+
+    // Шлем ответ каждые 200мс БЕЗ остановки
+    setInterval(ping, 200);
+  })();
+</script>
