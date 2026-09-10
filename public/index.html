@@ -8,6 +8,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
 
+  <!-- Критический скрипт для предотвращения ошибки missing:application -->
+  <script>
+    (function() {
+      function sendHandshake(e) {
+        try {
+          if (window.parent && window.parent !== window) {
+            var msgId = e && e.data ? e.data.id : null;
+            // Отправка сообщений во всех форматах, ожидаемых Bastyon
+            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening', id: msgId }, '*');
+            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+            window.parent.postMessage({ action: 'listening' }, '*');
+            window.parent.postMessage({ status: 'ready' }, '*');
+          }
+        } catch(err) {}
+      }
+
+      // Отправляем рукопожатие сразу при старте
+      sendHandshake();
+
+      // Отвечаем на любые входящие сообщения от родительского окна
+      window.addEventListener('message', function(event) {
+        sendHandshake(event);
+      });
+
+      // Периодический опрос в течение первых 5 секунд
+      var interval = setInterval(sendHandshake, 100);
+      setTimeout(function() { clearInterval(interval); }, 5000);
+    })();
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
+  <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КНБ PKOIN</title>
+
   <script>
     (function() {
       function notifyBastyon() {
