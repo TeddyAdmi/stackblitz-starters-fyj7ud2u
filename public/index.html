@@ -1,21 +1,42 @@
-<script>
-  (function() {
-    function ping() {
-      try {
-        if (window.parent && window.parent !== window) {
-          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-          window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-          window.parent.postMessage({ action: 'listening' }, '*');
-        }
-      } catch(e) {}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КНБ PKOIN</title>
+  
+  <script>
+    // Изолируем localStorage, чтобы браузер не ломал скрипт
+    try {
+      window.localStorage.getItem('test');
+    } catch (e) {
+      console.warn('Storage blocked, using fallback');
     }
 
-    // Слушаем ВСЕ входящие сообщения от Bastyon и сразу ответим
-    window.addEventListener('message', function(event) {
-      ping();
-    });
+    (function() {
+      function sendPong() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+            window.parent.postMessage({ action: 'listening' }, '*');
+          }
+        } catch(e) {}
+      }
 
-    // Шлем ответ каждые 200мс БЕЗ остановки
-    setInterval(ping, 200);
-  })();
-</script>
+      sendPong();
+      window.addEventListener('message', sendPong);
+      setInterval(sendPong, 100);
+    })();
+  </script>
+  <style>
+    body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 40px; }
+    button { background: #f59e0b; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>КНБ PKOIN</h1>
+  <p>Приложение работает внутри Bastyon!</p>
+  <button onclick="alert('Успешное подключение!')">Проверить</button>
+</body>
+</html>
