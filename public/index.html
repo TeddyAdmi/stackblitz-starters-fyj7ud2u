@@ -6,9 +6,15 @@
   <title>КНБ PKOIN</title>
 
   <script>
-    // Постоянный пульс (Heartbeat) для предотвращения скрытия кнопки по таймауту
+    // 1. Предотвращаем сбой FocusListener в Bastyon
+    try {
+      window.focus();
+      window.addEventListener('blur', function() { window.focus(); });
+    } catch(e) {}
+
+    // 2. Гарантированный постоянный отклик для Bastyon
     (function() {
-      function sendHandshake() {
+      function sendPong() {
         try {
           if (window.parent && window.parent !== window) {
             window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
@@ -19,23 +25,16 @@
         } catch(e) {}
       }
 
-      // 1. Немедленный вызов
-      sendHandshake();
-
-      // 2. Отклик на любые входящие сигналы
-      window.addEventListener('message', function(event) {
-        sendHandshake();
-      });
-
-      // 3. Отправка каждые 500мс для удерживания фокуса и интерфейса
-      setInterval(sendHandshake, 500);
+      sendPong();
+      window.addEventListener('message', sendPong);
+      setInterval(sendPong, 200);
     })();
   </script>
 
   <style>
     body {
       margin: 0;
-      background-color: #0f172a;
+      background: #0f172a;
       color: #ffffff;
       font-family: sans-serif;
       display: flex;
@@ -67,8 +66,8 @@
 
   <div class="card">
     <h2>КНБ PKOIN dApp</h2>
-    <p>Соединение с Bastyon удерживается!</p>
-    <button onclick="alert('Работает!')">Проверить</button>
+    <p>Приложение загружено успешно!</p>
+    <button onclick="alert('Кошелек подключен!')">Проверить</button>
   </div>
 
 </body>
