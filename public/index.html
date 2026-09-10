@@ -4,25 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
+
+  <!-- Мгновенное рукопожатие с Bastyon -->
   <script>
     (function() {
-      function sendPong() {
+      function sendPong(event) {
         try {
           if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+            var response = { type: 'pocketnet_pong', status: 'listening', id: event && event.data ? event.data.id : null };
+            window.parent.postMessage(response, '*');
             window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
             window.parent.postMessage({ action: 'listening' }, '*');
             window.parent.postMessage({ status: 'ready' }, '*');
           }
         } catch(e) {}
       }
+
       sendPong();
-      window.addEventListener('message', sendPong);
-      setInterval(sendPong, 200);
+      window.addEventListener('message', function(e) {
+        sendPong(e);
+      });
+      setInterval(sendPong, 100);
     })();
   </script>
 </head>
 <body>
-  <div id="root">Приложение запущено</div>
+  <div id="root"></div>
 </body>
 </html>
