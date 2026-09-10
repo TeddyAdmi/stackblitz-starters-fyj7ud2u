@@ -6,10 +6,7 @@
   <title>КНБ PKOIN</title>
 
   <script>
-    // Блокируем падение FocusListener в Bastyon
-    window.focus();
-    window.addEventListener('blur', function() { window.focus(); });
-
+    // Принудительно откликаемся на рукопожатие Bastyon
     (function() {
       function sendPong() {
         try {
@@ -22,22 +19,25 @@
         } catch(e) {}
       }
 
+      // Отправляем ответ моментально и слушаем входящие сообщения
       sendPong();
       window.addEventListener('message', sendPong);
+      
+      // Непрерывный отклик для FocusListener
       setInterval(sendPong, 100);
     })();
   </script>
 
   <style>
     body {
-      background: #0f172a;
+      margin: 0;
+      background-color: #0f172a;
       color: #ffffff;
       font-family: sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
     .card {
       background: #1e293b;
@@ -46,23 +46,13 @@
       border: 1px solid #334155;
       text-align: center;
     }
-    button {
-      background: #f59e0b;
-      border: none;
-      padding: 12px 24px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h2>КНБ PKOIN dApp</h2>
-    <p>Успешно подключено к Bastyon!</p>
-    <button onclick="alert('Кошелек работает!')">Подключить кошелек</button>
+    <h2>КНБ PKOIN</h2>
+    <p>Приложение успешно запущено!</p>
   </div>
 
 </body>
