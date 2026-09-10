@@ -4,38 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
-
   <script>
-    // 1. Предотвращаем сбой FocusListener в Bastyon
-    try {
-      window.focus();
-      window.addEventListener('blur', function() { window.focus(); });
-    } catch(e) {}
-
-    // 2. Гарантированный постоянный отклик для Bastyon
     (function() {
-      function sendPong() {
-        try {
-          if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-            window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
-            window.parent.postMessage({ action: 'listening' }, '*');
-            window.parent.postMessage({ status: 'ready' }, '*');
-          }
-        } catch(e) {}
+      function handshake() {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+          window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
+          window.parent.postMessage({ action: 'listening' }, '*');
+          window.parent.postMessage({ status: 'ready' }, '*');
+        }
       }
-
-      sendPong();
-      window.addEventListener('message', sendPong);
-      setInterval(sendPong, 200);
+      handshake();
+      window.addEventListener('message', handshake);
+      setInterval(handshake, 300);
     })();
   </script>
-
   <style>
     body {
       margin: 0;
       background: #0f172a;
-      color: #ffffff;
+      color: #fff;
       font-family: sans-serif;
       display: flex;
       justify-content: center;
@@ -48,27 +36,13 @@
       border-radius: 12px;
       border: 1px solid #334155;
       text-align: center;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    }
-    button {
-      background: #f59e0b;
-      color: #000;
-      border: none;
-      padding: 12px 24px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-
   <div class="card">
     <h2>КНБ PKOIN dApp</h2>
-    <p>Приложение загружено успешно!</p>
-    <button onclick="alert('Кошелек подключен!')">Проверить</button>
+    <p>Приложение успешно запущено в Bastyon!</p>
   </div>
-
 </body>
 </html>
