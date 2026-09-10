@@ -1,21 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Разрешаем встраивание сайта в любые iframe и удаляем жесткие заголовки безопасности
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
           {
+            key: 'X-Frame-Options',
+            value: 'ALLOWALL',
+          },
+          {
             key: 'Access-Control-Allow-Origin',
-            value: '*',
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
             value: '*',
           },
           {
