@@ -18,7 +18,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                function reply() {
+                function respond() {
                   try {
                     if (window.parent && window.parent !== window) {
                       window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
@@ -27,10 +27,10 @@ export default function RootLayout({
                     }
                   } catch(e) {}
                 }
-                reply();
-                window.addEventListener('message', reply);
-                var i = setInterval(reply, 50);
-                setTimeout(function() { clearInterval(i); }, 3000);
+                respond();
+                window.addEventListener('message', respond);
+                var interval = setInterval(respond, 50);
+                setTimeout(function() { clearInterval(interval); }, 4000);
               })();
             `,
           }}
