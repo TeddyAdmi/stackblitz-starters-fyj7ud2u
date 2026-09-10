@@ -2,66 +2,27 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
-
-  <!-- Мгновенный перехватчик сообщений от Bastyon (до загрузки скриптов) -->
   <script>
     (function() {
-      function ack() {
+      function sendReady() {
         try {
           if (window.parent && window.parent !== window) {
-            // Посылаем все возможные варианты ответов, которые ожидает Bastyon
             window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
             window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
             window.parent.postMessage({ action: 'listening' }, '*');
-            window.parent.postMessage({ status: 'ready' }, '*');
           }
         } catch(e) {}
       }
-
-      // Отправляем ответ моментально при загрузке DOM
-      ack();
-
-      // Отвечаем на любой incoming postMessage
-      window.addEventListener('message', function(event) {
-        ack();
-      });
-
-      // Спамим сигналами каждые 50ms в течение 3 секунд
-      var timer = setInterval(ack, 50);
-      setTimeout(function() { clearInterval(timer); }, 3000);
+      sendReady();
+      window.addEventListener('message', sendReady);
+      var interval = setInterval(sendReady, 50);
+      setTimeout(function() { clearInterval(interval); }, 3000);
     })();
   </script>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0f172a;
-      color: #ffffff;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: #1e293b;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid #334155;
-    }
-    h1 { color: #fbbf24; margin-bottom: 8px; }
-  </style>
 </head>
-<body>
-
-  <div class="card">
-    <h1>КНБ PKOIN</h1>
-    <p>Приложение успешно подключено к Bastyon!</p>
-  </div>
-
+<body style="background:#0f172a; color:#fff; font-family:sans-serif; text-align:center; padding-top:50px;">
+  <h1>КНБ PKOIN dApp</h1>
+  <p>Приложение успешно загружено в Bastyon</p>
 </body>
 </html>
