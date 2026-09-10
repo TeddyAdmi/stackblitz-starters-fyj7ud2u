@@ -4,14 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
-  
+
   <script>
-    // Изолируем localStorage, чтобы браузер не ломал скрипт
-    try {
-      window.localStorage.getItem('test');
-    } catch (e) {
-      console.warn('Storage blocked, using fallback');
-    }
+    // Блокируем падение FocusListener в Bastyon
+    window.focus();
+    window.addEventListener('blur', function() { window.focus(); });
 
     (function() {
       function sendPong() {
@@ -20,6 +17,7 @@
             window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
             window.parent.postMessage({ type: 'app_ready', status: 'ready' }, '*');
             window.parent.postMessage({ action: 'listening' }, '*');
+            window.parent.postMessage({ status: 'ready' }, '*');
           }
         } catch(e) {}
       }
@@ -29,14 +27,43 @@
       setInterval(sendPong, 100);
     })();
   </script>
+
   <style>
-    body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 40px; }
-    button { background: #f59e0b; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    body {
+      background: #0f172a;
+      color: #ffffff;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      text-align: center;
+    }
+    button {
+      background: #f59e0b;
+      border: none;
+      padding: 12px 24px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
-  <h1>КНБ PKOIN</h1>
-  <p>Приложение работает внутри Bastyon!</p>
-  <button onclick="alert('Успешное подключение!')">Проверить</button>
+
+  <div class="card">
+    <h2>КНБ PKOIN dApp</h2>
+    <p>Успешно подключено к Bastyon!</p>
+    <button onclick="alert('Кошелек работает!')">Подключить кошелек</button>
+  </div>
+
 </body>
 </html>
