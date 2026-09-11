@@ -1,13 +1,10 @@
 {
-  "id": "knb.pkoin.v4",
-  "name": "КНБ PKOIN",
+  "id": "pocket.simple.app",
+  "name": "Simple App",
   "version": "1.0.0",
-  "description": "Игра Камень Ножницы Бумага",
-  "author": "TSBRUhPWre3D23gpdsCYo3RpoAybt7YuDT",
+  "description": "Простое тестовое приложение",
   "scope": "pkoin-knb-game1.vercel.app",
   "permissions": [
-    "account",
-    "payment",
-    "messaging"
+    "account"
   ]
 }
