@@ -1,0 +1,10 @@
+{
+  "id": "pocket.simple.app",
+  "name": "Simple App",
+  "version": "1.0.0",
+  "description": "Простое тестовое приложение",
+  "scope": "pkoin-knb-game1.vercel.app",
+  "permissions": [
+    "account"
+  ]
+}
