@@ -4,41 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
-
-  <!-- Официальный SDK Bastyon -->
+  
+  <!-- Подключение SDK по документации -->
   <script src="https://bastyon.com/js/lib/apps/sdk.js"></script>
 
   <script>
-    (function() {
-      // Резервная отправка сигналов listening, пока загружается SDK
-      function pingParent() {
-        if (window.parent && window.parent !== window) {
-          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
-          window.parent.postMessage({ action: 'listening' }, '*');
-        }
-      }
-      pingParent();
-      var pinger = setInterval(pingParent, 100);
+    let sdk = null;
 
-      document.addEventListener('DOMContentLoaded', async function() {
-        clearInterval(pinger);
-        try {
-          if (window.BastyonSdk) {
-            const sdk = new window.BastyonSdk();
-            await sdk.init();
-            window.sdk = sdk;
-            
-            // Сообщаем оболочке Bastyon, что dApp слушает и готово
-            sdk.emit('loaded');
-          }
-        } catch (e) {
-          console.error('Ошибка инициализации SDK:', e);
+    async function initializeApp() {
+      try {
+        // Инициализация SDK согласно документации
+        sdk = new window.BastyonSdk();
+        await sdk.init();
+        
+        // Сигнал платформе Bastyon о завершении загрузки
+        sdk.emit('loaded');
+        console.log('Bastyon SDK успешно инициализирован');
+
+        // Проверка наличия прав
+        const hasMessaging = await sdk.permissions.check({ permission: 'messaging' });
+        if (!hasMessaging) {
+          await sdk.permissions.request(['messaging']);
         }
-      });
-    })();
+
+      } catch (error) {
+        console.error('Ошибка инициализации Bastyon SDK:', error);
+      }
+    }
+
+    // Вызов уведомления через Bastyon SDK по клику пользователя
+    async function showAlert(text) {
+      if (!sdk) return;
+      try {
+        await sdk.helpers.alert(text);
+      } catch (err) {
+        console.error('Ошибка при вызове sdk.helpers.alert:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeApp);
   </script>
 </head>
 <body>
-  <div id="root"></div>
+  <button onclick="showAlert('Привет из dApp!')">Показать уведомление</button>
 </body>
 </html>
