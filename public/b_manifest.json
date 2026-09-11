@@ -8,7 +8,6 @@
   "permissions": [
     "account",
     "payment",
-    "messaging",
-    "sign"
+    "messaging"
   ]
 }
