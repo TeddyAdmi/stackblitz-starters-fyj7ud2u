@@ -1,5 +1,5 @@
 {
-  "id": "pkoin.knb.game1",
+  "id": "knb.pkoin.v4",
   "name": "КНБ PKOIN",
   "description": "Игра Камень Ножницы Бумага",
   "author": "TSBRUhPWre3D23gpdsCYo3RpoAybt7YuDT",
@@ -7,7 +7,6 @@
   "permissions": [
     "account",
     "payment",
-    "messaging",
-    "sign"
+    "messaging"
   ]
 }
