@@ -2,50 +2,27 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>КНБ PKOIN</title>
-  
-  <!-- Подключение SDK по документации -->
+  <title>Simple App</title>
   <script src="https://bastyon.com/js/lib/apps/sdk.js"></script>
-
-  <script>
-    let sdk = null;
-
-    async function initializeApp() {
-      try {
-        // Инициализация SDK согласно документации
-        sdk = new window.BastyonSdk();
-        await sdk.init();
-        
-        // Сигнал платформе Bastyon о завершении загрузки
-        sdk.emit('loaded');
-        console.log('Bastyon SDK успешно инициализирован');
-
-        // Проверка наличия прав
-        const hasMessaging = await sdk.permissions.check({ permission: 'messaging' });
-        if (!hasMessaging) {
-          await sdk.permissions.request(['messaging']);
-        }
-
-      } catch (error) {
-        console.error('Ошибка инициализации Bastyon SDK:', error);
-      }
-    }
-
-    // Вызов уведомления через Bastyon SDK по клику пользователя
-    async function showAlert(text) {
-      if (!sdk) return;
-      try {
-        await sdk.helpers.alert(text);
-      } catch (err) {
-        console.error('Ошибка при вызове sdk.helpers.alert:', err);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', initializeApp);
-  </script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #222; color: #fff; }
+  </style>
 </head>
 <body>
-  <button onclick="showAlert('Привет из dApp!')">Показать уведомление</button>
+  <h1>🚀 Тестовое приложение работает!</h1>
+  <p id="status">Загрузка SDK...</p>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const sdk = new window.BastyonSdk();
+        await sdk.init();
+        sdk.emit('loaded'); // Обязательный сигнал Bastyon
+        document.getElementById('status').innerText = 'Приложение подключено!';
+      } catch (e) {
+        document.getElementById('status').innerText = 'Ошибка инициализации';
+      }
+    });
+  </script>
 </body>
 </html>
