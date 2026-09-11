@@ -5,25 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КНБ PKOIN</title>
 
-  <!-- Официальный скрипт SDK Bastyon из документации -->
+  <!-- Официальный SDK Bastyon -->
   <script src="https://bastyon.com/js/lib/apps/sdk.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-      try {
-        if (window.BastyonSdk) {
-          const sdk = new window.BastyonSdk();
-          await sdk.init();
-          window.sdk = sdk; // Сохраняем в глобальный доступ
-          
-          // Сообщаем платформе, что приложение полностью загружено
-          sdk.emit('loaded');
-          console.log('Bastyon SDK инициализирован успешно');
+    (function() {
+      // Резервная отправка сигналов listening, пока загружается SDK
+      function pingParent() {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'pocketnet_pong', status: 'listening' }, '*');
+          window.parent.postMessage({ action: 'listening' }, '*');
         }
-      } catch (e) {
-        console.error('Ошибка инициализации Bastyon SDK:', e);
       }
-    });
+      pingParent();
+      var pinger = setInterval(pingParent, 100);
+
+      document.addEventListener('DOMContentLoaded', async function() {
+        clearInterval(pinger);
+        try {
+          if (window.BastyonSdk) {
+            const sdk = new window.BastyonSdk();
+            await sdk.init();
+            window.sdk = sdk;
+            
+            // Сообщаем оболочке Bastyon, что dApp слушает и готово
+            sdk.emit('loaded');
+          }
+        } catch (e) {
+          console.error('Ошибка инициализации SDK:', e);
+        }
+      });
+    })();
   </script>
 </head>
 <body>
