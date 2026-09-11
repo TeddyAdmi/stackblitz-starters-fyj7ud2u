@@ -1,9 +1,13 @@
 {
-  "id": "pkoin-knb-game",
-  "name": "КНБ PKOIN",
-  "version": "1.0.0",
-  "description": "Игра Камень Ножницы Бумага",
-  "icon": "favicon.ico",
-  "entry": "index.html",
-  "permissions": []
+  "id": "knb.pkoin.v4",
+  "name": "КНБ PKOIN Game",
+  "description": "Игра Камень-Ножницы-Бумага на PKOIN",
+  "author": "TSBRUhPWre3D23gpdsCYo3RpoAybt7YuDT",
+  "scope": "pkoin-knb-game1.vercel.app",
+  "permissions": [
+    "account",
+    "payment",
+    "messaging",
+    "sign"
+  ]
 }
