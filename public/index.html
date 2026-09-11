@@ -3,43 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dApp</title>
+  <title>КНБ PKOIN</title>
 
-  <!-- Подключение официальной библиотеки Bastyon SDK -->
-  <script src="https://bastyon.com/js/vendor/pocketnet/sdk.js"></script>
+  <!-- Официальный скрипт SDK Bastyon из документации -->
+  <script src="https://bastyon.com/js/lib/apps/sdk.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Инициализация SDK Bastyon
-      if (window.PocketnetApp) {
-        window.sdk = new PocketnetApp();
-        
-        // Обязательная регистрация слушателей и отправка состояния готовности
-        window.sdk.init().then(function() {
-          console.log('Bastyon SDK успешно инициализирован');
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        if (window.BastyonSdk) {
+          const sdk = new window.BastyonSdk();
+          await sdk.init();
+          window.sdk = sdk; // Сохраняем в глобальный доступ
           
-          // Сообщаем оболочке Bastyon, что dApp готово к работе и отображению
-          window.sdk.emit('ready', true);
-        }).catch(function(err) {
-          console.error('Ошибка инициализации SDK:', err);
-        });
-      } else {
-        // Резервное рукопожатие через postMessage на случай задержки загрузки SDK
-        var sendInit = function() {
-          if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'app_ready', status: true }, '*');
-            window.parent.postMessage({ action: 'ready' }, '*');
-          }
-        };
-        sendInit();
-        setInterval(sendInit, 200);
+          // Сообщаем платформе, что приложение полностью загружено
+          sdk.emit('loaded');
+          console.log('Bastyon SDK инициализирован успешно');
+        }
+      } catch (e) {
+        console.error('Ошибка инициализации Bastyon SDK:', e);
       }
     });
   </script>
 </head>
 <body>
-  <div id="root">
-    <h1>Приложение загружено в Bastyon!</h1>
-  </div>
+  <div id="root"></div>
 </body>
 </html>
